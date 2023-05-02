@@ -1,0 +1,270 @@
+openapi: 3.0.3
+info:
+  title: Odoo FarmaPagos - OpenAPI 3.0
+  description: API para el consumo de datos de Odoo.
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://somosmoa-farmacr-1-test-7892605.dev.odoo.com
+tags:
+  - name: Cliente
+    description: Información del Cliente
+
+  - name: Productos
+    description: Acceso al listado de Productos
+
+  - name: Pedidos de Venta
+    description: Operaciones de Pedidos de Venta
+paths:
+  /getproductlist:
+    get:
+      tags:
+        - Productos
+      summary: Obtener listado de Productos
+      responses:
+        200:
+          description: (Ok) Se ha retornado una Lista de Productos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Producto'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+          
+  /createClient:
+    post:
+      tags: 
+        - Cliente
+      summary: Crear un nuevo Cliente
+      parameters:
+      -  $ref: '#/components/parameters/name'
+      -  $ref: '#/components/parameters/street'
+      -  $ref: '#/components/parameters/street2'
+      -  $ref: '#/components/parameters/city'
+      -  $ref: '#/components/parameters/vat'
+      -  $ref: '#/components/parameters/company_type'
+      responses:
+        200:
+          description: (Ok) Se ha creado un nuevo Cliente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientesPostSucced'
+              
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+          
+  /FindClient:
+    get:
+      tags: 
+        - Cliente
+      summary: Buscar un Cliente
+      parameters:
+      -  $ref: '#/components/parameters/id'
+
+      responses:
+        200:
+          description: (Ok) Se ha retornado datos del Cliente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+              
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+          
+  /createOrder:
+    post:
+      tags: 
+        - Pedidos de Venta
+      summary: Crear un pedido de venta
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PedidoVenta'
+
+      responses:
+        200:
+          description: (Ok) Se ha retornado datos del Cliente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+              
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'  
+          
+components:
+  responses:
+    Unauthorized:
+      description: (Unathorized) no hay autorizacion para llamar a este servicio.
+    NotFound:
+      description: (NotFound) no se encontro la informacion.
+    BadRequest:
+      description: (BadRequest) los datos enviados son incorrectos.
+    ServerError:
+      description: Error en el servidor
+      
+  parameters:
+    id:
+      name: id
+      in: header
+      description: Identificador del Cliente
+      required: True
+      schema:
+        type: integer
+        
+    name:
+      name: name
+      in: header
+      description: Nombre del Cliente
+      required: True
+      schema:
+        type: string
+    street:
+      name: street
+      in: header
+      description: Direccion del Cliente
+      required: True
+      schema:
+        type: string
+    street2:
+      name: street2
+      in: header
+      description: Direccion 2 del Cliente
+      required: True
+      schema:
+        type: string
+    city:
+      name: city
+      in: header
+      description: Ciudad
+      required: True
+      schema:
+        type: string
+    vat:
+      name: vat
+      in: header
+      description: Identificacion Fiscal
+      required: True
+      schema:
+        type: string
+    company_type:
+      name: company_type
+      in: header
+      description: Tipo de Cliente
+      required: True
+      schema:
+        type: string
+        enum:
+          - person
+          - company
+    
+  
+  schemas:
+    ClientesPostSucced:
+      type: object
+      properties:
+        respuesta:
+          type: integer
+          enum: [1]
+          description: Bandera para comprobar el exito de la peticion
+        id:
+          type: integer
+          enum: [1]
+          description: Id del Usuario Creado
+    Producto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1234
+        name:
+          type: string
+          example: Producto 1
+        Precio:
+          type: integer
+          format: float
+          example: 15.25
+        sku:
+          type: string
+          example: 'P003908A'
+        Cantidad:
+          type: integer
+          format: int64
+          example: 15
+    Cliente:
+     type: object
+     properties:
+      name:
+        type: string
+        example: Producto 1
+      street:
+        type: string
+        example: Producto 1
+      street2:
+        type: string
+        example: Producto 1
+      city:
+        type: string
+        example: Producto 1
+      vat:
+        type: string
+        example: Producto 1
+        
+    Detalle_Pedido:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          example: 110
+        product_uom_qty:
+          type: integer
+          example: 12
+        
+    PedidoVenta:
+      type: object
+      properties:
+        partner_id:
+          type: integer
+          example: 4
+        invoice_lines:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Detalle_Pedido'
+            
+  
