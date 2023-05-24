@@ -11,7 +11,7 @@ externalDocs:
   description: Find out more about Swagger
   url: http://swagger.io
 servers:
-  - url: https://somosmoa-farmacr-1-test-7892605.dev.odoo.com
+  - url: https://somosmoa-farmacr2-test-8381515.dev.odoo.com
 tags:
   - name: Cliente
     description: Información del Cliente
