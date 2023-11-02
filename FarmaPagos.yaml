@@ -11,7 +11,7 @@ externalDocs:
   description: Find out more about Swagger
   url: http://swagger.io
 servers:
-  - url: https://somosmoa-farmcr3-test-9217344.dev.odoo.com
+  - url: https://somosmoa-farmapagos-test2-10198171.dev.odoo.com
 tags:
   - name: Cliente
     description: Información del Cliente
@@ -21,12 +21,38 @@ tags:
 
   - name: Pedidos de Venta
     description: Operaciones de Pedidos de Venta
+    
 paths:
   /getproductlist:
     get:
       tags:
         - Productos
       summary: Obtener listado de Productos
+      responses:
+        200:
+          description: (Ok) Se ha retornado una Lista de Productos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Producto'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/ServerError'
+          
+  /productFilter:
+    get:
+      tags:
+        - Productos
+      summary: Obtener listado de Productos segun Filtro
+      parameters:
+      -  $ref: '#/components/parameters/filter'
       responses:
         200:
           description: (Ok) Se ha retornado una Lista de Productos
@@ -161,6 +187,15 @@ components:
       required: True
       schema:
         type: string
+        
+    filter:
+      name: filtro
+      in: header
+      description: Valor a filtrar en la peticion
+      required: True
+      schema:
+        type: string
+        
     street2:
       name: street2
       in: header
@@ -266,5 +301,3 @@ components:
           type: array
           items: 
             $ref: '#/components/schemas/Detalle_Pedido'
-            
-  
