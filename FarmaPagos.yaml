@@ -28,6 +28,8 @@ paths:
       tags:
         - Productos
       summary: Obtener listado de Productos
+      parameters:
+      -  $ref: '#/components/parameters/company_registry'
       responses:
         200:
           description: (Ok) Se ha retornado una Lista de Productos
@@ -52,6 +54,7 @@ paths:
         - Productos
       summary: Obtener listado de Productos segun Filtro
       parameters:
+      -  $ref: '#/components/parameters/company_registry'
       -  $ref: '#/components/parameters/filter'
       responses:
         200:
@@ -83,6 +86,7 @@ paths:
       -  $ref: '#/components/parameters/city'
       -  $ref: '#/components/parameters/vat'
       -  $ref: '#/components/parameters/company_type'
+      -  $ref: '#/components/parameters/company_registry'
       responses:
         200:
           description: (Ok) Se ha creado un nuevo Cliente
@@ -107,7 +111,7 @@ paths:
       summary: Buscar un Cliente
       parameters:
       -  $ref: '#/components/parameters/id'
-
+      -  $ref: '#/components/parameters/company_registry'
       responses:
         200:
           description: (Ok) Se ha retornado datos del Cliente
@@ -130,6 +134,8 @@ paths:
       tags: 
         - Pedidos de Venta
       summary: Crear un pedido de venta
+      parameters:
+      -  $ref: '#/components/parameters/company_registry'
       requestBody:
         content:
           application/json:
@@ -192,6 +198,14 @@ components:
       name: filtro
       in: header
       description: Valor a filtrar en la peticion
+      required: True
+      schema:
+        type: string
+      
+    company_registry:
+      name: company_registry
+      in: header
+      description: Identificador de Compañía
       required: True
       schema:
         type: string
